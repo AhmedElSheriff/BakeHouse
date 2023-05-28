@@ -1,14 +1,14 @@
 pipeline {
-    agent { label 'jenkins-ubuntu-slave' }
+    agent { label 'iti-slave-node' }
     stages {
         stage('build') {
             steps {
                 script {
-                   withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                   withCredentials([usernamePassword(credentialsId: 'dockerhub-acc', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                        sh """
                             docker login -u $USERNAME -p $PASSWORD
-                            docker build -t kareemelkasaby/itimansbakehouse:${BUILD_NUMBER} .
-                            docker push kareemelkasaby/itimansbakehouse:${BUILD_NUMBER}
+                            docker build -t ahmedlsheriff/iti-bakehouse:${BUILD_NUMBER} .
+                            docker push ahmedlsheriff/iti-bakehouse:${BUILD_NUMBER}
                        """
                    }
                 }
@@ -17,7 +17,7 @@ pipeline {
         stage('deploy') {
             steps {
                 script {
-                  withCredentials([file(credentialsId: 'iti-qena-kubeconfig', variable: 'KUBECONFIG')]) {
+                  withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                       sh """
                           mv Deployment/deploy.yaml Deployment/deploy.yaml.tmp
                           cat Deployment/deploy.yaml.tmp | envsubst > Deployment/deploy.yaml
