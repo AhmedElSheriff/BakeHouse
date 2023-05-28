@@ -5,7 +5,7 @@ pipeline {
             steps {
                 echo 'build'
                 script{
-                    if (${BRANCH_NAME} == "release") {
+                    if (${BRANCH_NAME} == "dev" || ${BRANCH_NAME} == "test" || ${BRANCH_NAME} == "preprod") {
                         withCredentials([usernamePassword(credentialsId: 'dockerhub-acc', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                             sh '''
                                 docker login -u ${USERNAME} -p ${PASSWORD}
@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo 'deploy'
                 script {
-                    if (${BRANCH_NAME} == "dev" || ${BRANCH_NAME} == "test" || ${BRANCH_NAME} == "preprod") {
+                    if (${BRANCH_NAME} == "release") {
                         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                             sh '''
                                 export BUILD_NUMBER=$(cat ../build.txt)
