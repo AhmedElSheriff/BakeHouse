@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo 'deploy'
                 script {
-                    if (BRANCH_NAME == "release") {
+                    if (BRANCH_NAME == "release" || BRANCH_NAME == "dev") {
                         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                             sh '''
                                 export BUILD_NUMBER=$(cat ../build.txt)
