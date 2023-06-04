@@ -1,0 +1,22 @@
+replicaCount: 1
+name: "bakehouse"
+labels:
+  app: "bakehouse"
+imagePullPolicy: "Always"
+containerPorts:
+  - 80
+envName: "test" 
+
+service:
+  name: "myservice"
+  labels:
+    app: "bakehouse"
+  portName: "bakehouseport"
+  portNumber: 80
+  protocol: "TCP"
+  targetPortNumber: 80
+  serviceType: NodePort
+
+BUILD_NUMBER: 1
+repoName: "ahmedlsheriff"
+imageName: "iti-bakehouse"
