@@ -4,9 +4,9 @@ kind: Service
 metadata:
   labels:
     {{- range $key, $val := .Values.service.labels }}
-    {{ $key }}: {{ $val }}
+    {{ $key }}: {{ $.Values.envName }}-{{ $val }}
     {{- end }}
-  name: {{ .Values.service.name }}
+  name: {{ .Values.envName }}-{{ .Values.service.name }}
 spec:
   ports:
   - name: {{ .Values.service.portName }}
@@ -15,7 +15,7 @@ spec:
     targetPort: {{ .Values.service.targetPortNumber }}
   selector:
     {{- range $key, $val := .Values.labels }}
-    {{ $key }}: {{ $val }}
+    {{ $key }}: {{ $.Values.envName }}-{{ $val }}
     {{- end }}
   type: {{ .Values.service.serviceType }}
 status:
