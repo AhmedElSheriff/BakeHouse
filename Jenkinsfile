@@ -31,7 +31,7 @@ pipeline {
                                         helm install bake-house ./bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
                                         --set BUILD_NUMBER=${BUILD_NUMBER}
                                     else
-                                        help upgrade bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
+                                        helm upgrade bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
                                         --set BUILD_NUMBER=${BUILD_NUMBER}
                                 fi
                             '''
