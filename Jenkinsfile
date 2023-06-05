@@ -27,13 +27,14 @@ pipeline {
                             sh '''
                                 export BUILD_NUMBER=$(cat ../build.txt)
                                 release=$(helm list --short | grep "^bake-house")
-                                if [[ -z $release ]]:
-                                    then
-                                        helm install bake-house ./bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
-                                        --set BUILD_NUMBER=${BUILD_NUMBER}
-                                    else
-                                        helm upgrade bake-house ./bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
-                                        --set BUILD_NUMBER=${BUILD_NUMBER}
+                                
+                                if [[ -z $release ]]
+                                then
+                                    helm install bake-house ./bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
+                                    --set BUILD_NUMBER=${BUILD_NUMBER}
+                                else
+                                    helm upgrade bake-house ./bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
+                                    --set BUILD_NUMBER=${BUILD_NUMBER}
                                 fi
                             '''
                         }
