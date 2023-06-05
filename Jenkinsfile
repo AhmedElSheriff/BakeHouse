@@ -26,7 +26,8 @@ pipeline {
                         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                             sh '''
                                 export BUILD_NUMBER=$(cat ../build.txt)
-                                if [[ ! `helm status bake-house` ]]:
+                                release=$(helm list --short | grep "^bake-house")
+                                if [[ -z $release ]]:
                                     then
                                         helm install bake-house ./bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
                                         --set BUILD_NUMBER=${BUILD_NUMBER}
