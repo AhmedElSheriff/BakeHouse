@@ -26,8 +26,14 @@ pipeline {
                         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                             sh '''
                                 export BUILD_NUMBER=$(cat ../build.txt)
-                                helm install bake-house ./bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
-                                --set BUILD_NUMBER=${BUILD_NUMBER}
+                                if [[ ! `helm status bake-house` ]]:
+                                    then
+                                        helm install bake-house ./bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
+                                        --set BUILD_NUMBER=${BUILD_NUMBER}
+                                    else
+                                        help upgrade bake-house --values bake-house/${BRANCH_NAME}-values.yaml \
+                                        --set BUILD_NUMBER=${BUILD_NUMBER}
+                                fi
                             '''
                         }
                     }
